@@ -2,6 +2,7 @@ from Punkt import Punkt
 from Gatunki import Gatunki
 from Organizm import Organizm
 import random
+from Organizmy import Wilk
 
 
 class Swiat:
@@ -10,6 +11,7 @@ class Swiat:
         self._rozmiar = rozmiar
         self._organizmy = []
         self.narrator = None
+        self._organizmy.append(Wilk.Wilk(self, Punkt(1, 2)))
 
     def nowa_gra(self, rozmiar_gry):
         self._rozmiar = rozmiar_gry
@@ -107,11 +109,11 @@ class Swiat:
         return self._rozmiar
 
     def zapisz(self, plik):
-        #TODO zapis swiata
+        # TODO zapis swiata
         pass
 
     def wczytaj(self, plik):
-        #TODO wczytanie swiata
+        # TODO wczytanie swiata
         pass
 
     def miesci_sie_w_planszy(self, p):

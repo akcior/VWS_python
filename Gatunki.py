@@ -11,5 +11,5 @@ class Gatunki(Enum):
     TRAWA = auto()
     MLECZ = auto()
     GUARANA = auto()
-    WILCZ_JAGODY = auto()
+    WILCZE_JAGODY = auto()
     BARSZCZ_SOSNOWSKIEGO = auto()

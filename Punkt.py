@@ -16,3 +16,9 @@ class Punkt:
         if isinstance(other, Punkt):
             return Punkt(self.x + other.x, self.y + other.y)
         return NotImplemented
+
+    def __truediv__(self, other):
+        try:
+            return Punkt(int(self.x / other.x), int(self.y / other.y))
+        except ZeroDivisionError as zex:
+            print(zex)
