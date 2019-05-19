@@ -2,11 +2,7 @@ from Punkt import Punkt
 from Gatunki import Gatunki
 from Organizm import Organizm
 import random
-from Organizmy.Wilk import Wilk
-from Organizmy.Owca import Owca
-from Organizmy.Lis import Lis
-from Organizmy.Zolw import Zolw
-from Organizmy.Antylopa import Antylopa
+import Organizmy
 
 
 class Swiat:
@@ -15,15 +11,17 @@ class Swiat:
         self._rozmiar = rozmiar
         self._organizmy = []
         self.narrator = None
-        # self._organizmy.append(Wilk(self, Punkt(1, 2)))
-        # self._organizmy.append(Wilk(self, Punkt(2, 2)))
-        self.stworz_organizm(Gatunki.WILK, Punkt(1, 5))
-        self.stworz_organizm(Gatunki.WILK, Punkt(1, 4))
-        self.stworz_organizm(Gatunki.WILK, Punkt(2, 5))
-        self.stworz_organizm(Gatunki.OWCA, Punkt(6, 5))
-        self.stworz_organizm(Gatunki.LIS, Punkt(4, 8))
-        self.stworz_organizm(Gatunki.ZOLW, Punkt(5, 5))
-        self.stworz_organizm(Gatunki.ANTYLOPA, Punkt(3, 8))
+        self.nowa_gra(rozmiar)
+        # self.stworz_organizm(Gatunki.WILK, Punkt(1, 5))
+        # self.stworz_organizm(Gatunki.WILK, Punkt(9, 6))
+        # self.stworz_organizm(Gatunki.OWCA, Punkt(6, 5))
+        # self.stworz_organizm(Gatunki.LIS, Punkt(4, 8))
+        # self.stworz_organizm(Gatunki.ZOLW, Punkt(5, 5))
+        # self.stworz_organizm(Gatunki.ANTYLOPA, Punkt(3, 8))
+        # self.stworz_organizm(Gatunki.MLECZ, Punkt(8, 8))
+        # self.stworz_organizm(Gatunki.GUARANA, Punkt(8, 1))
+        # self.stworz_organizm(Gatunki.WILCZE_JAGODY, Punkt(5, 1))
+        # self.stworz_organizm(Gatunki.BARSZCZ_SOSNOWSKIEGO, Punkt(3, 1))
 
     def nowa_gra(self, rozmiar_gry):
         self._rozmiar = rozmiar_gry
@@ -31,6 +29,7 @@ class Swiat:
         for gatunek in Gatunki:
             i = 0
             if gatunek == Gatunki.CZLOWIEK:
+                continue
                 i = 1
             while i < 2:
                 i += 1
@@ -75,7 +74,7 @@ class Swiat:
             if o != None:
                 return False
             nazwa_org = g.name[0] + g.name[1:].lower()
-            klasa_org = globals()[nazwa_org]
+            klasa_org = getattr(Organizmy, nazwa_org)
             self._organizmy.append(klasa_org(self, p))
         else:
             return False
@@ -88,21 +87,21 @@ class Swiat:
 
     def get_wszystkie_org_wokol(self, p):
         orgs = []
-        for i in range(-1, 1):
-            for j in range(-1, 1):
+        for i in range(-1, 2):
+            for j in range(-1, 2):
                 if i != 0 or j != 0:
                     k = p.get_lokacja
                     k.translacja(i, j)
                     if self.miesci_sie_w_planszy(k):
                         o = self.get_organizm_na_pozycji(k)
                         if o != None:
-                            self._organizmy.append(o)
+                            orgs.append(o)
         return orgs
 
     def get_losowy_wolny_kier_wokol(self, p):
         kier = []
-        for i in range(-1, 1):
-            for j in range(-1, 1):
+        for i in range(-1, 2):
+            for j in range(-1, 2):
                 if i * j == 0:
                     k = p.get_lokacja
                     k.translacja(i, j)
