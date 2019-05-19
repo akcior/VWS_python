@@ -12,6 +12,11 @@ class Punkt:
         self.x += x
         self.y += y
 
+    def __eq__(self, other):
+        if isinstance(other, Punkt):
+            return self.x == other.x and self.y == other.y
+        return NotImplemented
+
     def __add__(self, other):
         if isinstance(other, Punkt):
             return Punkt(self.x + other.x, self.y + other.y)

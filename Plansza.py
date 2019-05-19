@@ -9,13 +9,14 @@ class Plansza(tk.Frame):
     def __init__(self, master):
         super().__init__(master, bg="#55D24B")
         self.master = master
-        self.bind("<Button-1>", Plansza.klik)
+        #self.bind("<Button-1>", Plansza.klik)
         self._swiat = Swiat(Punkt(10, 10))
         self._rozmiar_ramki = Punkt(480, 480)
         self._rozmiar_swiata = self._swiat.get_rozmiar
         self._rozmiar_obrazka = self._rozmiar_ramki / self._rozmiar_swiata
         self.config(width=self._rozmiar_ramki.x, height=self._rozmiar_ramki.y)
         self._canvas = tk.Canvas(self, width=self._rozmiar_ramki.x, height=self._rozmiar_ramki.y)
+        self._canvas.bind("<Button-1>", Plansza.klik)
         self._obrazki_raw = {}
         self._obrazki = {}
         # for g in Gatunki:
@@ -27,17 +28,14 @@ class Plansza(tk.Frame):
             self._obrazki[g] = ImageTk.PhotoImage(plik.resize((self._rozmiar_obrazka.x,
                                                                self._rozmiar_obrazka.y),
                                                               Image.ANTIALIAS))
-        # g = Gatunki.WILK
-        # name = "assets/" + g.name.lower() + ".gif"
-        # plik = tk.PhotoImage(file=name)
-        # self._obrazki[g] = plik
         self.rysuj()
-        # self.grid(row=1, column=1)
-        # self.pack()
-        # canvas.pack(side=tk.LEFT, fill=tk.BOTH)
-        # self.stworz_widgets()
+
+    def nastepna_runda(self):
+        self._swiat.nastepna_runda()
+        self.rysuj()
 
     def rysuj(self):
+        self._canvas.delete("all")
         skala = Punkt()
         skala.x = self._rozmiar_obrazka.x / 32
         skala.y = self._rozmiar_obrazka.y / 32
@@ -50,11 +48,10 @@ class Plansza(tk.Frame):
 
         for o in self._swiat.get_wszystkie_organizmy():
             pozycja = o.get_pozycja
-            self._canvas.create_image(pozycja.x * self._rozmiar_obrazka.x + int(self._rozmiar_obrazka.x * 1.5),
-                                      pozycja.y * self._rozmiar_obrazka.x + int(self._rozmiar_obrazka.y * 1.5),
+            self._canvas.create_image(pozycja.x * self._rozmiar_obrazka.x + int(self._rozmiar_obrazka.x * 0.5),
+                                      pozycja.y * self._rozmiar_obrazka.x + int(self._rozmiar_obrazka.y * 0.5),
                                       image=self._obrazki[o.get_gatunek])
-
-            self._canvas.pack(fill=tk.BOTH, expand=1)
+        self._canvas.pack(fill=tk.BOTH, expand=1)
 
             # def stworz_widgets(self):
             #     self.hi_there = tk.Button(self)

@@ -2,7 +2,11 @@ from Punkt import Punkt
 from Gatunki import Gatunki
 from Organizm import Organizm
 import random
-from Organizmy import Wilk
+from Organizmy.Wilk import Wilk
+from Organizmy.Owca import Owca
+from Organizmy.Lis import Lis
+from Organizmy.Zolw import Zolw
+from Organizmy.Antylopa import Antylopa
 
 
 class Swiat:
@@ -11,7 +15,15 @@ class Swiat:
         self._rozmiar = rozmiar
         self._organizmy = []
         self.narrator = None
-        self._organizmy.append(Wilk.Wilk(self, Punkt(1, 2)))
+        # self._organizmy.append(Wilk(self, Punkt(1, 2)))
+        # self._organizmy.append(Wilk(self, Punkt(2, 2)))
+        self.stworz_organizm(Gatunki.WILK, Punkt(1, 5))
+        self.stworz_organizm(Gatunki.WILK, Punkt(1, 4))
+        self.stworz_organizm(Gatunki.WILK, Punkt(2, 5))
+        self.stworz_organizm(Gatunki.OWCA, Punkt(6, 5))
+        self.stworz_organizm(Gatunki.LIS, Punkt(4, 8))
+        self.stworz_organizm(Gatunki.ZOLW, Punkt(5, 5))
+        self.stworz_organizm(Gatunki.ANTYLOPA, Punkt(3, 8))
 
     def nowa_gra(self, rozmiar_gry):
         self._rozmiar = rozmiar_gry
@@ -47,12 +59,13 @@ class Swiat:
 
             # jesli organizm wczesniejszy zostal usuniety
             # zapobiega to ominieciu nastepnego organizmu
-            i = self._organizmy.index(o)
-            i += 1
+            if o in self._organizmy:
+                i = self._organizmy.index(o)
+                i += 1
 
     def get_organizm_na_pozycji(self, p):
         for org in self._organizmy:
-            if org.getPozycja() == p:
+            if org.get_pozycja == p:
                 return org
         return None
 
@@ -61,11 +74,9 @@ class Swiat:
             o = self.get_organizm_na_pozycji(p)
             if o != None:
                 return False
-            # TODO tworzenie organizmu
-            # org_konstrukt = getattr()
-            # self.organizmy.append(Organizm(self,Gatunki.WILK,Punkt(1,2)))
-            org = Organizm(self, Gatunki.WILK, Punkt(1, 2))
-
+            nazwa_org = g.name[0] + g.name[1:].lower()
+            klasa_org = globals()[nazwa_org]
+            self._organizmy.append(klasa_org(self, p))
         else:
             return False
 
@@ -100,7 +111,7 @@ class Swiat:
                         if o == None:
                             kier.append(Punkt(i, j))
         if len(kier) > 0:
-            return kier[random.randint(0, len(kier))]
+            return random.choice(kier)
         else:
             return Punkt(0, 0)
 

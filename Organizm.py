@@ -1,4 +1,4 @@
-#from Organizmy import Roslina
+# from Organizmy import Roslina
 from Punkt import Punkt
 from abc import ABC, abstractmethod
 from random import *
@@ -9,7 +9,7 @@ class Organizm:
     def __init__(self, swiat, gat, poz=None, plik=None):
         self._swiat = swiat
         self._gatunek = gat
-        # self._pozycja = Punkt(0, 0)
+        self._pozycja = Punkt(0, 0)
         if poz != None:
             self._pozycja = poz
             self._zyje = True
@@ -57,17 +57,20 @@ class Organizm:
         pass
 
     @abstractmethod
-    def kolizja(self, other_organizm):
+    def kolizja(self, other_org):
         pass
 
     def sproboj_sie_rozmnozyc(self):
         return random() < self._szansa_rozmnozenia
 
-    def rozmnoz_sie(self):
-        # TODO rozmnazanie
-        pass
+    def _rozmnoz_sie(self):
+        k = self._swiat.get_losowy_wolny_kier_wokol(self.get_pozycja)
+        if k != Punkt(0, 0):
+            k.translacja(self._pozycja.x, self._pozycja.y)
+            self._swiat.stworz_organizm(self._gatunek,k)
+            # TODO narracja rozmnazania
 
-    def zablokuj_atak(self):
+    def zablokuj_atak(self, other_org):
         return False
 
     def silniejszy_od(self, other):
@@ -87,9 +90,13 @@ class Organizm:
 
     def umrzyj(self):
         self._zyje = False
-        # TODO usuniecie organizmu ze swiata
+        self._swiat.usun_organizm(self)
+
+    def zapisz(self, zap):
+        # TODO zapis do pliku
         pass
 
-    def zapisz(self,zap):
-        #TODO zapis do pliku
+    @property
+    @abstractmethod
+    def plec(self):
         pass
