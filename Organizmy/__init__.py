@@ -1,3 +1,4 @@
+from Organizmy.Czlowiek import Czlowiek
 from Organizmy.Wilk import Wilk
 from Organizmy.Antylopa import  Antylopa
 from Organizmy.Owca import Owca

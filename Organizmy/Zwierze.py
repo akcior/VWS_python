@@ -24,7 +24,7 @@ class Zwierze(Organizm):
         kier = self._znajdz_kier_do_ruchu()
         if kier == Punkt(0, 0):
             return False
-        kier.translacja(self.get_pozycja.x,self.get_pozycja.y)
+        kier.translacja(self.get_pozycja.x, self.get_pozycja.y)
         if self._swiat.miesci_sie_w_planszy(kier):
             o = self._swiat.get_organizm_na_pozycji(kier)
             if o == None:
@@ -44,7 +44,7 @@ class Zwierze(Organizm):
                     if i * j == 0 and (i != 0 or j != 0):
                         k.append(Punkt(i, j))
         if len(k) > 0:
-            #return k[random.randint(0, len(k))]
+            # return k[random.randint(0, len(k))]
             return random.choice(k)
         else:
             return Punkt(0, 0)
@@ -62,11 +62,11 @@ class Zwierze(Organizm):
                     if not other_org.zrob_unik():
                         if not other_org.zablokuj_atak(other_org):
                             other_org.umrzyj()
-                            # TODO narracja smierci
+                            self._swiat.narrator.org_umarl_przez_org(other_org, self)
                             return True
                 else:
                     self._zyje = False
-                    # TODO narracja smierci
+                    self._swiat.narrator.org_umarl_przez_org(self, other_org)
                     return False
         elif isinstance(other_org, Roslina):
             # kolizja roslin moze zmieniac parametry zwierzecia ktore je zjadlo
@@ -74,7 +74,7 @@ class Zwierze(Organizm):
                 return True
             else:
                 self._zyje = False
-                # TODO narracja smierci
+                self._swiat.narrator.org_umarl_przez_org(self, other_org)
                 return False
         return False
 

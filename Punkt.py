@@ -27,3 +27,6 @@ class Punkt:
             return Punkt(int(self.x / other.x), int(self.y / other.y))
         except ZeroDivisionError as zex:
             print(zex)
+
+    def __str__(self):
+        return "(" + str(self.x) +", " + str(self.y)+ ")"

@@ -15,6 +15,5 @@ class Roslina(Organizm):
 
     def kolizja(self, other_org):
         self.umrzyj()
-
-        # TODO narracja smierci
+        self._swiat.narrator.org_umarl_przez_org(self,other_org)
         return True

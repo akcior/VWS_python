@@ -67,8 +67,8 @@ class Organizm:
         k = self._swiat.get_losowy_wolny_kier_wokol(self.get_pozycja)
         if k != Punkt(0, 0):
             k.translacja(self._pozycja.x, self._pozycja.y)
-            self._swiat.stworz_organizm(self._gatunek,k)
-            # TODO narracja rozmnazania
+            self._swiat.stworz_organizm(self._gatunek, k)
+            self._swiat.narrator.org_rozmnozyl_sie(self)
 
     def zablokuj_atak(self, other_org):
         return False
@@ -86,7 +86,7 @@ class Organizm:
                 if isinstance(o, ros.Roslina):
                     continue
             o.umrzyj()
-            # TODO narracja o smierci
+            self._swiat.narrator.org_umarl_przez_org(o, self)
 
     def umrzyj(self):
         self._zyje = False
@@ -100,3 +100,7 @@ class Organizm:
     @abstractmethod
     def plec(self):
         pass
+
+    def __str__(self):
+        return self._gatunek.name[0] + self._gatunek.name[
+                                       1:].lower() + " na pozycji:" + str(self._pozycja)

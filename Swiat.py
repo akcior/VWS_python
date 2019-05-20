@@ -3,6 +3,7 @@ from Gatunki import Gatunki
 from Organizm import Organizm
 import random
 import Organizmy
+import Narrator
 
 
 class Swiat:
@@ -10,7 +11,7 @@ class Swiat:
     def __init__(self, rozmiar=Punkt(1, 1)):
         self._rozmiar = rozmiar
         self._organizmy = []
-        self.narrator = None
+        self.narrator = Narrator.Narrator()
         self.nowa_gra(rozmiar)
         # self.stworz_organizm(Gatunki.WILK, Punkt(1, 5))
         # self.stworz_organizm(Gatunki.WILK, Punkt(9, 6))
@@ -29,7 +30,7 @@ class Swiat:
         for gatunek in Gatunki:
             i = 0
             if gatunek == Gatunki.CZLOWIEK:
-                continue
+                #continue
                 i = 1
             while i < 2:
                 i += 1
@@ -61,6 +62,13 @@ class Swiat:
             if o in self._organizmy:
                 i = self._organizmy.index(o)
                 i += 1
+        self.narrator.opowiadaj()
+
+    def get_czlowiek(self):
+        for org in self._organizmy:
+            if org.get_gatunek == Gatunki.CZLOWIEK:
+                return org
+        return None
 
     def get_organizm_na_pozycji(self, p):
         for org in self._organizmy:

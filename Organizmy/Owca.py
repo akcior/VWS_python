@@ -8,6 +8,5 @@ class Owca(Zwierze):
         self._sila = 4
         self._inicjatywa = 4
 
-    @property
     def plec(self):
         return "a"

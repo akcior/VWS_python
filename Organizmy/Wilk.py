@@ -8,6 +8,5 @@ class Wilk(Zwierze):
         self._sila = 9
         self._inicjatywa = 5
 
-    @property
     def plec(self):
         return ""

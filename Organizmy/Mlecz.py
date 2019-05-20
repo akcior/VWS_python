@@ -12,5 +12,6 @@ class Mlecz(Roslina):
             if i < 2:
                 self._wiek -= 1
         return True
+
     def plec(self):
         return ""
