@@ -3,8 +3,8 @@ from Gatunki import Gatunki
 
 
 class Antylopa(Zwierze):
-    def __init__(self, s, p):
-        super().__init__(s, Gatunki.ANTYLOPA, p)
+    def __init__(self, s, p=None, plik=None):
+        super().__init__(s, Gatunki.ANTYLOPA, p, plik)
         self._sila = 4
         self._inicjatywa = 4
         self._zasieg = 2

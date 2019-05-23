@@ -29,8 +29,7 @@ class Swiat:
         self._organizmy.clear()
         for gatunek in Gatunki:
             i = 0
-            if gatunek == Gatunki.CZLOWIEK:
-                #continue
+            if gatunek == Gatunki.CZLOWIEK or gatunek == Gatunki.BARSZCZ_SOSNOWSKIEGO:
                 i = 1
             while i < 2:
                 i += 1
@@ -76,16 +75,29 @@ class Swiat:
                 return org
         return None
 
-    def stworz_organizm(self, g, p):
-        if self.miesci_sie_w_planszy(p):
-            o = self.get_organizm_na_pozycji(p)
-            if o != None:
+    def stworz_organizm(self, g=None, p=None, plik=None):
+        if p != None and g != None:
+            if self.miesci_sie_w_planszy(p):
+                o = self.get_organizm_na_pozycji(p)
+                if o != None:
+                    return False
+                nazwa_org = g.name[0] + g.name[1:].lower()
+                klasa_org = getattr(Organizmy, nazwa_org)
+                self._organizmy.append(klasa_org(self, p))
+                return True
+            else:
                 return False
-            nazwa_org = g.name[0] + g.name[1:].lower()
-            klasa_org = getattr(Organizmy, nazwa_org)
-            self._organizmy.append(klasa_org(self, p))
+        elif plik != None:
+            nazwa_org = plik.readline()
+            if nazwa_org:
+                nazwa_org = nazwa_org[0] + nazwa_org[1:-1].lower()
+                klasa_org = getattr(Organizmy, nazwa_org)
+                self._organizmy.append(klasa_org(self, plik=plik))
+                return True
+            else:
+                return False
         else:
-            return False
+            return NotImplemented
 
     def usun_organizm(self, org):
         self._organizmy.remove(org)
@@ -127,12 +139,18 @@ class Swiat:
         return self._rozmiar
 
     def zapisz(self, plik):
-        # TODO zapis swiata
-        pass
+        plik.write(str(self._rozmiar.x) + "\n")
+        plik.write(str(self._rozmiar.y) + "\n")
+        for o in self._organizmy:
+            o.zapisz(plik)
 
     def wczytaj(self, plik):
-        # TODO wczytanie swiata
-        pass
+        self._organizmy.clear()
+        self._rozmiar = Punkt()
+        self._rozmiar.x = int(plik.readline())
+        self._rozmiar.y = int(plik.readline())
+        while self.stworz_organizm(plik=plik):
+            continue
 
     def miesci_sie_w_planszy(self, p):
         if isinstance(p, Punkt):

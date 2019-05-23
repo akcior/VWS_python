@@ -4,10 +4,11 @@ import random
 
 
 class Zolw(Zwierze):
-    def __init__(self, s, p):
-        super().__init__(s, Gatunki.ZOLW, p)
-        self._sila = 2
-        self._inicjatywa = 1
+    def __init__(self, s, p=None, plik=None):
+        super().__init__(s, Gatunki.ZOLW, p, plik)
+        if p != None:
+            self._sila = 2
+            self._inicjatywa = 1
 
     def akcja(self):
         if random.random() < 0.25:

@@ -3,8 +3,8 @@ from Gatunki import Gatunki
 
 
 class Guarana(Roslina):
-    def __init__(self, s, p):
-        super().__init__(s, Gatunki.GUARANA, p)
+    def __init__(self, s, p=None, plik=None):
+        super().__init__(s, Gatunki.GUARANA, p, plik)
 
     def kolizja(self, other_org):
         other_org.add_sila(3)

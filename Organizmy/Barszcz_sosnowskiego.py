@@ -3,8 +3,8 @@ from Gatunki import Gatunki
 
 
 class Barszcz_sosnowskiego(Roslina):
-    def __init__(self, s, p):
-        super().__init__(s,Gatunki.BARSZCZ_SOSNOWSKIEGO, p)
+    def __init__(self, s, p=None, plik=None):
+        super().__init__(s,Gatunki.BARSZCZ_SOSNOWSKIEGO, p, plik)
         self._sila = 10
 
     def akcja(self):

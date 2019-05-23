@@ -3,8 +3,8 @@ from Gatunki import Gatunki
 
 
 class Mlecz(Roslina):
-    def __init__(self, s, p):
-        super().__init__(s, Gatunki.MLECZ, p)
+    def __init__(self, s, p=None, plik=None):
+        super().__init__(s, Gatunki.MLECZ, p, plik)
 
     def akcja(self):
         for i in range(3):

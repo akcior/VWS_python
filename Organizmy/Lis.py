@@ -4,10 +4,11 @@ from Gatunki import Gatunki
 
 
 class Lis(Zwierze):
-    def __init__(self, s, p):
-        super().__init__(s, Gatunki.LIS, p)
-        self._sila = 3
-        self._inicjatywa = 7
+    def __init__(self, s, p=None, plik=None):
+        super().__init__(s, Gatunki.LIS, p, plik)
+        if p != None:
+            self._sila = 3
+            self._inicjatywa = 7
 
     def _znajdz_kier_do_ruchu(self):
         for i in range(4):

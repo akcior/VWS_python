@@ -7,7 +7,10 @@ from Organizmy.Roslina import Roslina
 class Zwierze(Organizm):
     def __init__(self, s, gat, poz=None, plik=None):
         super().__init__(s, gat, poz, plik)
-        self._szansa_ucieczki = 0
+        if poz !=None:
+            self._szansa_ucieczki = 0
+        elif plik != None:
+            self._szansa_ucieczki = float(plik.readline())
 
     def akcja(self):
         self._wiek += 1
@@ -87,3 +90,7 @@ class Zwierze(Organizm):
             self._pozycja.translacja(k.x, k.y)
             return True
         return False
+
+    def zapisz(self, plik):
+        super().zapisz(plik)
+        plik.write(str(self._szansa_ucieczki) + "\n")

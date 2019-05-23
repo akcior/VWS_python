@@ -7,16 +7,15 @@ from PIL import Image, ImageTk
 
 class Plansza(tk.Frame):
     def __init__(self, master):
-        super().__init__(master, bg="#55D24B")
+        super().__init__(master)
         self.master = master
-        # self.bind("<Button-1>", Plansza.klik)
         self._swiat = Swiat(Punkt(10, 10))
         self._rozmiar_ramki = Punkt(480, 480)
         self._rozmiar_swiata = self._swiat.get_rozmiar
         self._rozmiar_obrazka = self._rozmiar_ramki / self._rozmiar_swiata
         self.config(width=self._rozmiar_ramki.x, height=self._rozmiar_ramki.y)
         self._canvas = tk.Canvas(self, width=self._rozmiar_ramki.x, height=self._rozmiar_ramki.y)
-        self._canvas.bind("<Button-1>", Plansza.klik)
+        self._canvas.bind("<Button-1>", lambda event: self.klik(event))
         self._obrazki_raw = {}
         self._obrazki = {}
         # for g in Gatunki:
@@ -31,12 +30,30 @@ class Plansza(tk.Frame):
         plik = Image.open("assets/celownik.png")
         self._obrazki_raw["celownik"] = plik.crop(box=(0, 0, 32, 32))
         self._obrazki["celownik"] = ImageTk.PhotoImage(plik.resize((self._rozmiar_obrazka.x,
-                                                           self._rozmiar_obrazka.y),
-                                                          Image.ANTIALIAS))
+                                                                    self._rozmiar_obrazka.y),
+                                                                   Image.ANTIALIAS))
         self.rysuj()
 
     def nastepna_runda(self):
         self._swiat.nastepna_runda()
+        self.rysuj()
+
+    def nowa_gra(self):
+        from tkinter import simpledialog
+        nowy_rozmiar = Punkt()
+        nowy_rozmiar.x = tk.simpledialog.askinteger("Nowa gra", "Podaj szerokosc")
+        nowy_rozmiar.y = tk.simpledialog.askinteger("Nowa gra", "Podaj wysokosc")
+        if nowy_rozmiar.x == None or nowy_rozmiar.y == None:
+            return
+
+        self._rozmiar_swiata = nowy_rozmiar
+        self._rozmiar_obrazka = self._rozmiar_ramki / self._rozmiar_swiata
+        # zmiana rozmiaru obrazkow
+        for key in self._obrazki_raw:
+            self._obrazki[key] = ImageTk.PhotoImage(self._obrazki_raw[key].resize((self._rozmiar_obrazka.x,
+                                                                                   self._rozmiar_obrazka.y),
+                                                                                  Image.ANTIALIAS))
+        self._swiat.nowa_gra(nowy_rozmiar)
         self.rysuj()
 
     def rysuj(self):
@@ -54,30 +71,25 @@ class Plansza(tk.Frame):
         for o in self._swiat.get_wszystkie_organizmy():
             pozycja = o.get_pozycja
             self._canvas.create_image(pozycja.x * self._rozmiar_obrazka.x + int(self._rozmiar_obrazka.x * 0.5),
-                                      pozycja.y * self._rozmiar_obrazka.x + int(self._rozmiar_obrazka.y * 0.5),
+                                      pozycja.y * self._rozmiar_obrazka.y + int(self._rozmiar_obrazka.y * 0.5),
                                       image=self._obrazki[o.get_gatunek])
-            if o.get_gatunek == Gatunki.CZLOWIEK and o.get_nastepny_ruch != Punkt(0,0):
-                self._canvas.create_image((pozycja.x + o.get_nastepny_ruch.x) * self._rozmiar_obrazka.x + int(self._rozmiar_obrazka.x * 0.5),
-                                          (pozycja.y + o.get_nastepny_ruch.y) * self._rozmiar_obrazka.x + int(self._rozmiar_obrazka.y * 0.5),
-                                      image=self._obrazki["celownik"])
-        self._canvas.pack(fill=tk.BOTH, expand=1)
+            if o.get_gatunek == Gatunki.CZLOWIEK and o.get_nastepny_ruch != Punkt(0, 0):
+                self._canvas.create_image(
+                    (pozycja.x + o.get_nastepny_ruch.x) * self._rozmiar_obrazka.x + int(self._rozmiar_obrazka.x * 0.5),
+                    (pozycja.y + o.get_nastepny_ruch.y) * self._rozmiar_obrazka.y + int(self._rozmiar_obrazka.y * 0.5),
+                    image=self._obrazki["celownik"])
+        self._canvas.pack()
 
-        # def stworz_widgets(self):
-        #     self.hi_there = tk.Button(self)
-        #     self.hi_there["text"] = "Hello World\n(click me)"
-        #     self.hi_there["command"] = self.say_hi
-        #     self.hi_there.pack(side="top")
-        #
-        #     self.quit = tk.Button(self, text="QUIT", fg="red",
-        #                           command=self.master.destroy)
-        #     self.quit.pack(side="bottom")
-        #
-        # def say_hi(self):
-        #     print("hi there, everyone!")
 
-    @staticmethod
-    def klik(event):
-        print("Clicked at:", event.x, event.y)
+    def klik(self,event):
+        if self.master.org_do_stworzenia.get() != "Stworz organizm":
+
+            poz = Punkt()
+            poz.x = int(event.x/self._rozmiar_obrazka.x)
+            poz.y = int(event.y/self._rozmiar_obrazka.y)
+            self._swiat.stworz_organizm(Gatunki[self.master.org_do_stworzenia.get()],poz)
+            self.master.org_do_stworzenia.set("Stworz organizm")
+            self.rysuj()
 
     def obsluga_klawatury(self, event):
         czlowiek = self._swiat.get_czlowiek()
@@ -96,6 +108,31 @@ class Plansza(tk.Frame):
         cz = self._swiat.get_czlowiek()
         if cz != None:
             cz.aktywuj_moc()
+            self._swiat.narrator.opowiadaj()
 
     def ustaw_pole_narratora(self, pole):
         self._swiat.narrator.ustaw_pole_tekstowe(pole)
+
+    def zapisz_gre(self):
+        from tkinter import filedialog
+        nazwa = tk.filedialog.asksaveasfilename(initialdir="/", title="Select file")
+        # print(plik)
+        plik = open(nazwa, "w")
+        self._swiat.zapisz(plik)
+        plik.close()
+
+    def wczytaj_gre(self):
+        from tkinter import filedialog
+        nazwa_pliku = tk.filedialog.askopenfilename()
+        plik = open(nazwa_pliku, "r")
+        if plik != None:
+            self._swiat.wczytaj(plik)
+            plik.close()
+            self._rozmiar_swiata = self._swiat.get_rozmiar.get_lokacja
+            self._rozmiar_obrazka = self._rozmiar_ramki / self._rozmiar_swiata
+            # zmiana rozmiaru obrazkow
+            for key in self._obrazki_raw:
+                self._obrazki[key] = ImageTk.PhotoImage(self._obrazki_raw[key].resize((self._rozmiar_obrazka.x,
+                                                                                       self._rozmiar_obrazka.y),
+                                                                                      Image.ANTIALIAS))
+            self.rysuj()

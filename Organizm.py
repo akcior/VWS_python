@@ -10,16 +10,24 @@ class Organizm:
         self._swiat = swiat
         self._gatunek = gat
         self._pozycja = Punkt(0, 0)
+        self._zyje = True
         if poz != None:
             self._pozycja = poz
-            self._zyje = True
             self._wiek = 0
-            self._inicjatywa = 0
             self._sila = 0
+            self._inicjatywa = 0
             self._zasieg = 1
             self._szansa_rozmnozenia = 1
+        elif plik != None:
+            self._pozycja.x = int(plik.readline())
+            self._pozycja.y = int(plik.readline())
+            self._wiek = int(plik.readline())
+            self._sila = int(plik.readline())
+            self._inicjatywa = int(plik.readline())
+            self._zasieg = int(plik.readline())
+            self._szansa_rozmnozenia = float(plik.readline())
+
         else:
-            # TODO wczytywanie organizmu z pliku
             return NotImplemented
 
     @property
@@ -92,9 +100,15 @@ class Organizm:
         self._zyje = False
         self._swiat.usun_organizm(self)
 
-    def zapisz(self, zap):
-        # TODO zapis do pliku
-        pass
+    def zapisz(self, plik):
+        plik.write(self._gatunek.name + "\n")
+        plik.write(str(self._pozycja.x) + "\n")
+        plik.write(str(self._pozycja.y) + "\n")
+        plik.write(str(self._wiek) + "\n")
+        plik.write(str(self._sila) + "\n")
+        plik.write(str(self._inicjatywa) + "\n")
+        plik.write(str(self._zasieg) + "\n")
+        plik.write(str(self._szansa_rozmnozenia) + "\n")
 
     @property
     @abstractmethod

@@ -2,6 +2,10 @@ from enum import Enum, auto
 
 
 class Gatunki(Enum):
+    @classmethod
+    def list(cls):
+        return list(map(lambda c: c.name, cls))
+
     CZLOWIEK = auto()
     WILK = auto()
     OWCA = auto()
