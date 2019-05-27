@@ -9,7 +9,7 @@ class Guarana(Roslina):
     def kolizja(self, other_org):
         other_org.add_sila(3)
         self.umrzyj()
-        self._swiat.narrator.org_umarl_przez_org(self,other_org)
+        self._swiat.narrator.org_umarl_przez_org(self, other_org)
         return True
 
     def plec(self):

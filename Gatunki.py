@@ -11,6 +11,7 @@ class Gatunki(Enum):
     OWCA = auto()
     LIS = auto()
     ZOLW = auto()
+    CYBER_OWCA = auto()
     ANTYLOPA = auto()
     TRAWA = auto()
     MLECZ = auto()

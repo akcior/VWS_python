@@ -1,4 +1,5 @@
 import tkinter as tk
+from tkinter import simpledialog
 from Swiat import Swiat
 from Punkt import Punkt
 from Gatunki import Gatunki
@@ -80,16 +81,17 @@ class Plansza(tk.Frame):
                     image=self._obrazki["celownik"])
         self._canvas.pack()
 
-
-    def klik(self,event):
+    def klik(self, event):
         if self.master.org_do_stworzenia.get() != "Stworz organizm":
-
             poz = Punkt()
-            poz.x = int(event.x/self._rozmiar_obrazka.x)
-            poz.y = int(event.y/self._rozmiar_obrazka.y)
-            self._swiat.stworz_organizm(Gatunki[self.master.org_do_stworzenia.get()],poz)
-            self.master.org_do_stworzenia.set("Stworz organizm")
-            self.rysuj()
+            poz.x = int(event.x / self._rozmiar_obrazka.x)
+            poz.y = int(event.y / self._rozmiar_obrazka.y)
+            if self.master.org_do_stworzenia.get() == "CZLOWIEK" and self._swiat.get_czlowiek() != None:
+                tk.simpledialog.messagebox.showerror("Tworzenie organizmu", "Nie mozna dodac kolejnego czlowieka")
+            else:
+                self._swiat.stworz_organizm(Gatunki[self.master.org_do_stworzenia.get()], poz)
+                self.master.org_do_stworzenia.set("Stworz organizm")
+                self.rysuj()
 
     def obsluga_klawatury(self, event):
         czlowiek = self._swiat.get_czlowiek()

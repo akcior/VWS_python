@@ -19,7 +19,7 @@ class Narrator():
         self._wydarzenia.append(str(o) + " uzyl" + o.plec() + " mocy: " + nazwa)
 
     def mocy_pozostalo(self, nazwa, pozostalo):
-        self._wydarzenia.append("Mocy " + nazwa + " pozostało: " +str(pozostalo) + " rund.")
+        self._wydarzenia.append("Mocy " + nazwa + " pozostało: " + str(pozostalo) + " rund.")
 
     def moc_odnowi_sie_za(self, nazwa, odnowienie):
         self._wydarzenia.append("Moc " + nazwa + " odnowi się za: " + str(odnowienie) + " rund.")
@@ -33,7 +33,7 @@ class Narrator():
     def opowiadaj(self):
         self._pole_tekstowe.config(state=tk.NORMAL)
         self._pole_tekstowe.delete('1.0', tk.END)
-        #self._pole_tekstowe.update()
+        # self._pole_tekstowe.update()
         for st in self._wydarzenia:
             self._pole_tekstowe.insert(tk.END, st + "\n")
 

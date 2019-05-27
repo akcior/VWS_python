@@ -29,7 +29,7 @@ class Swiat:
         self._organizmy.clear()
         for gatunek in Gatunki:
             i = 0
-            if gatunek == Gatunki.CZLOWIEK or gatunek == Gatunki.BARSZCZ_SOSNOWSKIEGO:
+            if gatunek == Gatunki.CZLOWIEK or gatunek == Gatunki.BARSZCZ_SOSNOWSKIEGO or gatunek == Gatunki.CYBER_OWCA:
                 i = 1
             while i < 2:
                 i += 1
@@ -133,6 +133,17 @@ class Swiat:
             return random.choice(kier)
         else:
             return Punkt(0, 0)
+
+    def get_najblizszy_org_z_gatunku(self, poz, gat):
+        najblizszy = Punkt(0, 0)
+        odleglosc = self._rozmiar.x + self._rozmiar.y
+        for o in self._organizmy:
+            if o.get_gatunek == gat:
+                other_pozycja = o.get_pozycja
+                if odleglosc > abs(other_pozycja.x - poz.x) + abs(other_pozycja.y - poz.y):
+                    najblizszy = other_pozycja
+                    odleglosc = abs(other_pozycja.x - poz.x) + abs(other_pozycja.y - poz.y)
+        return najblizszy
 
     @property
     def get_rozmiar(self):

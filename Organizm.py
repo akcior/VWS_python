@@ -84,7 +84,7 @@ class Organizm:
     def silniejszy_od(self, other):
         return self._sila >= other.get_sila
 
-    def zabij_wszystkich_wokol(self, tylko_zwierzeta=False):
+    def zabij_wszystkich_wokol(self, tylko_zwierzeta=False, ex=None):
         from Organizmy import Roslina as ros
         orgs = self._swiat.get_wszystkie_org_wokol(self._pozycja)
         for o in orgs:
@@ -93,6 +93,8 @@ class Organizm:
             if tylko_zwierzeta:
                 if isinstance(o, ros.Roslina):
                     continue
+            if o.get_gatunek in ex:
+                continue
             o.umrzyj()
             self._swiat.narrator.org_umarl_przez_org(o, self)
 
